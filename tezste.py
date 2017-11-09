@@ -14,6 +14,15 @@ def distancia(xyA,xyB): #calcula a distancia reta entre dois pontos
     d = sqrt((xB-xA)**2 + (yB-yA)**2)
     return round(d,12)
 
+'''
+#escreve um arq de distancias (reta) entre todas as cidades
+f=open("distancias.txt",'w')
+for k in range(1,39):
+    for city in range(1,39):
+        f.write("De: "+ str(k) + " Para: " + str(city) +" -> " + str(distancia(cidades[str(k)],cidades[str(city)]))+"\n")
+f.close()
+'''
+
 cidades_custo = {} #dicionario com o custo de cada viagem {('cityA_number','cityB_number'): distancia}
 for k in range(1,39):
     for c in range(1,39):
@@ -44,6 +53,13 @@ def vizinho(solucao):
         d = solucao[posD]
         solucao[posC] = d
         solucao[posD] = c
+
+        # posE = random.randint(0, 37)
+        # posF = random.randint(0, 37)
+        # e = solucao[posE]
+        # f = solucao[posF]
+        # solucao[posE] = f
+        # solucao[posF] = e
         if solucao != solucao_anterior:
             break
     return solucao
@@ -74,20 +90,17 @@ def annealing(solution):
     print("Calculando rotas.....\n")
     old_cost = custo_total(solution)
     T = 1.0
-    T_min = 0.0001
+    T_min = 0.0000001
     alpha = 0.9
-    best_solution, best_cost = solution[::], old_cost
+    best_solution, best_cost = solution.copy(), old_cost
     while T > T_min:
         i = 1
         while i <= 500:
             new_solution = vizinho(solution)
             new_cost = custo_total(new_solution)
-            p = probabilidade(old_cost, new_cost, T)
-            if new_cost < best_cost:
-                best_solution = new_solution[::]
-                best_cost = new_cost
-            if p > round(random.random(), 3):
-                solution = new_solution[::]
+            ap = probabilidade(old_cost, new_cost, T)
+            if ap > round(random.random(),3):
+                solution = new_solution.copy()
                 old_cost = new_cost
             i += 1
 
@@ -99,6 +112,5 @@ def gerar_solucao(): #gera uma solucao aleatoria
     random.shuffle(solucao_aleatoria)
     return solucao_aleatoria
 solucao_inicial = gerar_solucao()
-
 solucao_final, cost = annealing(solucao_inicial)
 print(solucao_final, "Solução Final \n", cost,"Custo Final")
