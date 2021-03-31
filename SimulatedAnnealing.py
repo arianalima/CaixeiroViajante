@@ -15,8 +15,8 @@ def distancia(xyA,xyB): #calcula a distancia reta entre dois pontos
     return round(d,12)
 
 cidades_custo = {} #dicionario com o custo de cada viagem {('cityA_number','cityB_number'): distancia}
-for k in range(1,39):
-    for c in range(1,39):
+for k in range(1,42):
+    for c in range(1,42):
         cidades_custo[(str(k),str(c))] = distancia(cidades[str(k)],cidades[str(c)])
 
 def custo_total(lista_cidades): #retorna o custo total de uma solucao
